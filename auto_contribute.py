@@ -4,7 +4,6 @@ import datetime
 FILE_NAME = "daily_log.txt"
 
 def update_log():
-    # Determine the number of contributions by counting lines in the log file
     if os.path.exists(FILE_NAME):
         with open(FILE_NAME, "r") as file:
             lines = file.readlines()
