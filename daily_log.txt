@@ -1,0 +1,2 @@
+# Daily Contribution Log
+# Format: Contribution Day X - YYYY-MM-DD HH:MM:SS 

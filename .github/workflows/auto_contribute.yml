@@ -8,11 +8,15 @@ on:
 jobs:
   update-log:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       # Step 1: Checkout the repository
       - name: Checkout Repository
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       # Step 2: Set up Python
       - name: Set up Python
@@ -32,4 +36,4 @@ jobs:
           git config user.email "actions@github.com"
           git add daily_log.txt
           git commit -m "Automated contribution: $(date -u +"%Y-%m-%d %H:%M:%S")"
-          git push
+          git push origin main
