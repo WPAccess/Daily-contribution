@@ -1,40 +1,43 @@
-name: Daily Contribution
+   name: Daily Contribution
 
-on:
-  schedule:
-    # Runs daily at 12:00 UTC
-    - cron: "0 12 * * *"
-  workflow_dispatch:  # Allows manual triggering
+   on:
+     schedule:
+       # Runs daily at 12:00 UTC
+       - cron: "0 12 * * *"
+     workflow_dispatch:  # Allows manual triggering
 
-jobs:
-  update-log:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
+   jobs:
+     update-log:
+       runs-on: ubuntu-latest
+       permissions:
+         contents: write
 
-    steps:
-      # Step 1: Checkout the repository
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+       steps:
+         # Step 1: Checkout the repository
+         - name: Checkout Repository
+           uses: actions/checkout@v3
+           with:
+             token: ${{ secrets.GITHUB_TOKEN }}
 
-      # Step 2: Set up Python
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.x"
+         # Step 2: Set up Python
+         - name: Set up Python
+           uses: actions/setup-python@v4
+           with:
+             python-version: "3.10"
 
-      # Step 3: Run the script
-      - name: Run auto_contribute.py
-        run: |
-          python auto_contribute.py
+         # Step 3: Run the script
+         - name: Run auto_contribute.py
+           run: |
+             python -V
+             python auto_contribute.py
+           continue-on-error: false
 
-      # Step 4: Commit changes
-      - name: Commit changes
-        run: |
-          git config user.name "GitHub Actions Bot"
-          git config user.email "actions@github.com"
-          git add daily_log.txt
-          git commit -m "Automated contribution: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
-          git push origin main
+         # Step 4: Commit changes
+         - name: Commit changes
+           if: success()
+           run: |
+             git config user.name "GitHub Actions Bot"
+             git config user.email "actions@github.com"
+             git add daily_log.txt
+             git commit -m "Automated contribution: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
+             git push origin main
