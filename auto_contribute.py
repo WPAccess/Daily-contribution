@@ -11,7 +11,7 @@ def update_log():
         # Check if we already have an entry for today
         if os.path.exists(FILE_NAME):
             with open(FILE_NAME, "r") as file:
-                lines = file.readlines()
+                lines = [line for line in file.readlines() if line.strip() and not line.startswith('#')]
                 if lines and current_date in lines[-1]:
                     print(f"Already contributed for {current_date}")
                     return
