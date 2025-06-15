@@ -1,12 +1,15 @@
 import os
 import datetime
 import sys
+from datetime import timezone
 
 FILE_NAME = "daily_log.txt"
 
 def update_log():
     try:
-        current_date = datetime.datetime.now().strftime("%Y-%m-%d")
+        # Get current UTC time
+        current_utc = datetime.datetime.now(timezone.utc)
+        current_date = current_utc.strftime("%Y-%m-%d")
         
         # Check if we already have an entry for today
         if os.path.exists(FILE_NAME):
@@ -20,8 +23,8 @@ def update_log():
             contribution_count = 1
 
         # Create or update the log file
-        current_time = datetime.datetime.now().strftime("%H:%M:%S")
-        log_entry = f"Contribution Day {contribution_count} - {current_date} {current_time}\n"
+        current_time = current_utc.strftime("%H:%M:%S")
+        log_entry = f"Contribution Day {contribution_count} - {current_date} {current_time} UTC\n"
         
         with open(FILE_NAME, "a") as file:
             file.write(log_entry)

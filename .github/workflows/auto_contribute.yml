@@ -36,5 +36,5 @@ jobs:
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
           git add daily_log.txt
-          git commit -m "Automated contribution: $(date -u +"%Y-%m-%d %H:%M:%S")"
+          git commit -m "Automated contribution: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
           git push origin main
