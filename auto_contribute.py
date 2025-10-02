@@ -1,9 +1,31 @@
 import os
 import datetime
 import sys
+import subprocess
 from datetime import timezone
 
 FILE_NAME = "daily_log.txt"
+
+def make_git_commit(message):
+    """Make a git commit with the given message."""
+    try:
+        # Add the log file to git
+        subprocess.run(["git", "add", FILE_NAME], check=True, capture_output=True)
+        
+        # Make the commit
+        subprocess.run(["git", "commit", "-m", message], check=True, capture_output=True)
+        
+        # Push to remote (optional, can be commented out if not needed)
+        # subprocess.run(["git", "push"], check=True, capture_output=True)
+        
+        print(f"Git commit successful: {message}")
+        return True
+    except subprocess.CalledProcessError as e:
+        print(f"Git commit failed: {e}", file=sys.stderr)
+        return False
+    except Exception as e:
+        print(f"Git error: {str(e)}", file=sys.stderr)
+        return False
 
 def update_log():
     try:
@@ -29,6 +51,11 @@ def update_log():
         with open(FILE_NAME, "a") as file:
             file.write(log_entry)
         print(f"Successfully added contribution for {current_date}")
+        
+        # Make a git commit
+        commit_message = f"Daily contribution #{contribution_count} - {current_date}"
+        if not make_git_commit(commit_message):
+            print("Warning: Log updated but git commit failed", file=sys.stderr)
         
     except Exception as e:
         print(f"Error updating log: {str(e)}", file=sys.stderr)
