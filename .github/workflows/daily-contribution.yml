@@ -5,31 +5,36 @@ on:
     - cron: '0 12 * * *'  # Run daily at 12:00 UTC
   workflow_dispatch:  # Allow manual trigger
 
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-contribution-main
+  cancel-in-progress: false
+
 jobs:
   contribute:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-          
+
       - name: Configure Git
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          
+          git config --local user.email "164142354+WPAccess@users.noreply.github.com"
+          git config --local user.name "Abhishek Kumar"
+
       - name: Run daily contribution
         run: python3 auto_contribute.py
-        
+
       - name: Push changes
         run: |
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          git push origin HEAD:main

@@ -1,5 +1,4 @@
 import os
-import datetime
 import sys
 import subprocess
 from datetime import timezone
@@ -55,7 +54,8 @@ def update_log():
         # Make a git commit
         commit_message = f"Daily contribution #{contribution_count} - {current_date}"
         if not make_git_commit(commit_message):
-            print("Warning: Log updated but git commit failed", file=sys.stderr)
+            print("Error: log updated but git commit failed", file=sys.stderr)
+            sys.exit(1)
         
     except Exception as e:
         print(f"Error updating log: {str(e)}", file=sys.stderr)
